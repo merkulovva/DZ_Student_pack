@@ -71,7 +71,7 @@ public:
         else cout << "Хорошее настроение" << endl;
     }
 
-    void setMarkStudent(Student &student) {
+    virtual void setMarkStudent(Student &student) {
 
         bool isExcellent = student.isExcellentStudent();
 
@@ -98,6 +98,30 @@ public:
 
     void setMarkStudent(Student& student, int mark) {
         student.addMark(mark);
+    }
+
+};
+
+
+
+class KindTeacher: public Teacher {
+
+public:
+
+    void setMarkStudent(Student &student) override {
+        student.addMark(5);
+    }
+
+};
+
+
+
+class EvilTeacher: public Teacher {
+
+public:
+
+    void setMarkStudent(Student &student) override {
+        student.addMark(2);
     }
 
 };
@@ -155,25 +179,22 @@ int main() {
     cout << "студент 2: ";
     s2.printMarks();
 
-    cout << "студент 3: ";
-    s3.printMarks();
+    cout << "Оценки доброго учителя:" << endl;
+    KindTeacher t1;
+    Lesson fizra;
+    fizra.addStudent(s1);
+    fizra.addStudent(s2);
+    fizra.setAllMarks(t1);
+    fizra.printNewMarks();
 
-    cout << "студент 4: ";
-    s4.printMarks();
 
-    Teacher t;
-    t.setMood(0);
-
-    Lesson math;
-    math.addStudent(s1);
-    math.addStudent(s2);
-    math.addStudent(s3);
-    math.addStudent(s4);
-
-    math.setAllMarks(t);
-
-    cout << "Новые оценки после урока математики:" << endl;
-    math.printNewMarks();
+    cout << "Оценки злого учителя:" << endl;
+    EvilTeacher t2;
+    Lesson music;
+    music.addStudent(s1);
+    music.addStudent(s2);
+    music.setAllMarks(t2);
+    music.printNewMarks();
 
     return 0;
 }
