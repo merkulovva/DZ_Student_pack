@@ -1,5 +1,8 @@
 #include <iostream>
 #include <vector>
+#include <string>
+#include <cstdlib>
+#include <ctime>
 
 using namespace std;
 
@@ -15,6 +18,13 @@ public:
     // Метод для добавления отметки
     void addMark(int mark) {
         marks.push_back(mark);
+    }
+
+    void printMarks() {
+        for (int i = 0; i < marks.size(); i++) {
+            cout << marks[i] << ", ";
+        }
+        cout << endl;
     }
 
 
@@ -52,9 +62,44 @@ public:
 
 
 class Teacher {
+private:
+    bool mood = rand() % 2;
 
 public:
-    // Метод для выставления отметки студенту
+
+    void setMood(bool m) {
+        mood = m;
+        if (mood == 0) cout << "Плохое настроение" << endl;
+        else cout << "Хорошее настроение" << endl;
+    }
+
+
+    void setMarkStudent(Student &student) {
+
+        bool isExcellent = student.isExcellentStudent();
+
+        if (mood == 1) {
+            if (isExcellent) {
+                student.addMark(5);
+            }
+
+            else {
+                student.addMark(4);
+            }
+        }
+
+        else {
+            if (isExcellent) {
+                student.addMark((rand() % 2 == 0) ? 4 : 5);
+            }
+
+            else {
+                student.addMark((rand() % 2 == 0) ? 2 : 3);
+            }
+        }
+    }
+
+
     void setMarkStudent(Student& student, int mark) {
         student.addMark(mark);
     }
@@ -64,14 +109,21 @@ public:
 
 
 int main() {
-    Student student1;
-    Teacher teacher;
 
-    teacher.setMarkStudent(student1, 3);
-    teacher.setMarkStudent(student1, 3);
-    teacher.setMarkStudent(student1, 4);
+    srand(time(NULL));
+    Student a;
+    a.addMark(5);
+    a.addMark(5);
+    a.addMark(5);
+    a.printMarks();
+    a.isExcellentStudent();
 
-    student1.isExcellentStudent();
+    Teacher t;
+    t.setMood(0);
+    t.setMarkStudent(a);
+
+    a.printMarks();
+    a.isExcellentStudent();
 
     return 0;
 }
