@@ -60,8 +60,9 @@ public:
 
 
 class Teacher {
-private:
+protected:
     bool mood = rand() % 2;
+    int moodCounter = 0;
 
 public:
 
@@ -94,6 +95,13 @@ public:
                 student.addMark((rand() % 2 == 0) ? 2 : 3);
             }
         }
+
+        moodCounter++;
+        if ((moodCounter % 5) == 0) {
+            int moodChange = rand();
+            setMood(moodChange % 2);
+        }
+
     }
 
     void setMarkStudent(Student& student, int mark) {
@@ -102,6 +110,48 @@ public:
 
 };
 
+
+
+class RandomMoodTeacher: public Teacher {
+
+private:
+    bool mood = rand() % 2;
+
+public:
+
+    void setMarkStudent(Student &student) override {
+
+        bool isExcellent = student.isExcellentStudent();
+
+        if (mood == 1) {
+            if (isExcellent) {
+                student.addMark(5);
+            }
+
+            else {
+                student.addMark(4);
+            }
+        }
+
+        else {
+            if (isExcellent) {
+                student.addMark((rand() % 2 == 0) ? 4 : 5);
+            }
+
+            else {
+                student.addMark((rand() % 2 == 0) ? 2 : 3);
+            }
+        }
+
+        moodCounter++;
+        if ((moodCounter % 2) == 0) {
+            int moodChange = rand();
+            setMood(moodChange % 2);
+        }
+
+    }
+
+};
 
 
 class KindTeacher: public Teacher {
@@ -113,7 +163,6 @@ public:
     }
 
 };
-
 
 
 class EvilTeacher: public Teacher {
@@ -166,35 +215,38 @@ int main() {
 
     srand(time(NULL));
 
-    Student s1, s2, s3, s4;
+    Student a, b, c, d;
+    a.addMark(4);
+    b.addMark(3);
+    c.addMark(5);
+    d.addMark(5);
 
-    s1.addMark(5);
-    s2.addMark(2);
-    s3.addMark(3);
-    s4.addMark(4);
-
-    cout << "студент 1: ";
-    s1.printMarks();
-
-    cout << "студент 2: ";
-    s2.printMarks();
-
-    cout << "Оценки доброго учителя:" << endl;
-    KindTeacher t1;
+    Teacher t;
+    t.setMood(0);
     Lesson fizra;
-    fizra.addStudent(s1);
-    fizra.addStudent(s2);
-    fizra.setAllMarks(t1);
+    fizra.addStudent(a);
+    fizra.addStudent(b);
+    fizra.addStudent(c);
+    fizra.addStudent(d);
+    fizra.setAllMarks(t);
+    fizra.setAllMarks(t);
+    fizra.setAllMarks(t);
+    fizra.setAllMarks(t);
+    fizra.setAllMarks(t);
     fizra.printNewMarks();
 
-
-    cout << "Оценки злого учителя:" << endl;
-    EvilTeacher t2;
-    Lesson music;
-    music.addStudent(s1);
-    music.addStudent(s2);
-    music.setAllMarks(t2);
-    music.printNewMarks();
+    RandomMoodTeacher t1;
+    Lesson math;
+    math.addStudent(a);
+    math.addStudent(b);
+    math.addStudent(c);
+    math.addStudent(d);
+    math.setAllMarks(t1);
+    math.setAllMarks(t1);
+    math.setAllMarks(t1);
+    math.setAllMarks(t1);
+    math.setAllMarks(t1);
+    math.printNewMarks();
 
     return 0;
 }
