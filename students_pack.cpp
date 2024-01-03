@@ -51,12 +51,25 @@ public:
 
 
 
+class Teacher {
+
+public:
+    // Метод для выставления отметки студенту
+    void setMarkStudent(Student& student, int mark) {
+        student.addMark(mark);
+    }
+
+};
+
+
+
 int main() {
     Student student1;
+    Teacher teacher;
 
-    student1.addMark(4);
-    student1.addMark(5);
-    student1.addMark(5);
+    teacher.setMarkStudent(student1, 3);
+    teacher.setMarkStudent(student1, 3);
+    teacher.setMarkStudent(student1, 4);
 
     student1.isExcellentStudent();
 
