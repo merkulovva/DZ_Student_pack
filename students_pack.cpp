@@ -27,7 +27,6 @@ public:
         cout << endl;
     }
 
-
     // Метод для вычисления РАУ
     double calculateRAU() const {
         if (marks.empty()) {
@@ -41,7 +40,6 @@ public:
 
         return sum / marks.size();
     }
-
 
     // Метод для определения является ли студент отличником
     bool isExcellentStudent() const {
@@ -73,7 +71,6 @@ public:
         else cout << "Хорошее настроение" << endl;
     }
 
-
     void setMarkStudent(Student &student) {
 
         bool isExcellent = student.isExcellentStudent();
@@ -99,7 +96,6 @@ public:
         }
     }
 
-
     void setMarkStudent(Student& student, int mark) {
         student.addMark(mark);
     }
@@ -108,22 +104,76 @@ public:
 
 
 
+class Lesson {
+
+public:
+
+    void addStudent(Student &student) {
+        groupList.push_back(student);
+    }
+
+    void setAllMarks(Teacher &teacher) {
+        for (int i = 0; i < groupList.size(); i++) {
+            teacher.setMarkStudent(groupList[i]);
+        }
+    }
+
+    void printNewMarks() {
+        int n = 0;
+
+        for (int i = 0; i < groupList.size(); i++) {
+            n++;
+            cout << n << " студент: ";
+            groupList[i].printMarks();
+        }
+        cout << endl;
+    }
+
+
+private:
+    vector<Student> groupList;
+
+};
+
+
+
+
 int main() {
 
     srand(time(NULL));
-    Student a;
-    a.addMark(5);
-    a.addMark(5);
-    a.addMark(5);
-    a.printMarks();
-    a.isExcellentStudent();
+
+    Student s1, s2, s3, s4;
+
+    s1.addMark(5);
+    s2.addMark(2);
+    s3.addMark(3);
+    s4.addMark(4);
+
+    cout << "студент 1: ";
+    s1.printMarks();
+
+    cout << "студент 2: ";
+    s2.printMarks();
+
+    cout << "студент 3: ";
+    s3.printMarks();
+
+    cout << "студент 4: ";
+    s4.printMarks();
 
     Teacher t;
     t.setMood(0);
-    t.setMarkStudent(a);
 
-    a.printMarks();
-    a.isExcellentStudent();
+    Lesson math;
+    math.addStudent(s1);
+    math.addStudent(s2);
+    math.addStudent(s3);
+    math.addStudent(s4);
+
+    math.setAllMarks(t);
+
+    cout << "Новые оценки после урока математики:" << endl;
+    math.printNewMarks();
 
     return 0;
 }
