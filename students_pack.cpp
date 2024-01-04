@@ -3,6 +3,7 @@
 #include <string>
 #include <cstdlib>
 #include <ctime>
+#include <set>
 
 using namespace std;
 
@@ -15,6 +16,14 @@ private:
 
 public:
     Student(string n): name(n) {};
+
+    bool operator == (const Student &other) const {
+        return (name == other.name);
+    }
+
+    vector<int> getMarks() {
+        return marks;
+    }
 
     string getName() {
         return name;
@@ -67,8 +76,15 @@ class Teacher {
 protected:
     bool mood = rand() % 2;
     int moodCounter = 0;
+    string name;
 
 public:
+
+    Teacher(string n): name(n) {};
+
+    virtual string getName() {
+        return name;
+    }
 
     void setMood(bool m) {
         mood = m;
@@ -121,6 +137,11 @@ private:
     bool mood = rand() % 2;
 
 public:
+     RandomMoodTeacher(string n): Teacher(n) {};
+
+     string getName() override {
+        return name;
+    }
 
     void setMarkStudent(Student &student) override {
 
@@ -159,6 +180,11 @@ public:
 class KindTeacher: public Teacher {
 
 public:
+     KindTeacher(string n): Teacher(n) {};
+
+     string getName() override {
+        return name;
+    }
 
     void setMarkStudent(Student &student) override {
         student.addMark(5);
@@ -169,6 +195,11 @@ public:
 class EvilTeacher: public Teacher {
 
 public:
+    EvilTeacher(string n): Teacher(n) {};
+
+    string getName() override {
+        return name;
+    }
 
     void setMarkStudent(Student &student) override {
         student.addMark(2);
@@ -178,11 +209,20 @@ public:
 
 
 class Lesson {
+private:
+    vector<Student> groupList;
+    string name;
+    string teacherName;
 
 public:
+    Lesson(string n): name(n) {};
 
     void addStudent(Student &student) {
         groupList.push_back(student);
+    }
+
+    vector<Student> getAllStudents(){
+        return groupList;
     }
 
     void setAllMarks(Teacher &teacher) {
@@ -220,8 +260,29 @@ public:
         cout << endl;
     }
 
-private:
-    vector<Student> groupList;
+    Student getStudent(int num) {
+        return groupList[num];
+    }
+
+    bool CertainIsExcellentStudent(Student &student) {
+        float sum;
+
+        for (int i = 1; i < student.getMarks().size(); i++) {
+            sum += student.getMarks()[i];
+        }
+            sum = (sum / ((student.getMarks().size()) - 1));
+
+        if (sum == 5) return 1;
+        return 0;
+    }
+
+    string getLessonName() {
+        return name;
+    }
+
+    string getTeacherName() {
+        return teacherName;
+    }
 
 };
 
@@ -231,12 +292,18 @@ class Parent {
 private:
     bool mood = rand() % 2;
     vector<Student> children;
+    set<string> childrenList;
 
 
 public:
 
     void addChild(Student &child) {
         children.push_back(child);
+        childrenList.insert(child.getName());
+    }
+
+    set<string> getList() {
+        return childrenList;
     }
 
     void sayAboutAllChild() {
@@ -282,14 +349,14 @@ public:
 
     void sayAboutCertainChild(string name) {
 
-        int counter = 10000;
+        int counter = -1;
 
         for (int i = 0; i < children.size(); i++) {
             if ((children[i].getName()) == name) counter = i;
             else continue;
         }
 
-        if (counter != 10000) {
+        if (counter != -1) {
             bool token = 1;
 
             for (int i = 0; i < children.size(); i++) {
@@ -304,6 +371,109 @@ public:
         }
 
         else cout << name << " - это не мой ребенок" << endl;
+    }
+
+    vector<Student> getChildren() {
+        return children;
+    }
+
+};
+
+
+class Meeting {
+
+private:
+    set<string> list_1;
+    set<string> list_2;
+
+    vector<Parent> parents;
+    vector<Teacher> teachers;
+    vector<Lesson> lessons;
+
+public:
+
+    Meeting() {
+        cout << "Новое собрание!" << endl;
+    }
+
+    void showList_1() {
+
+        if (list_2.size() == 0) {
+            cout << endl;
+            return;
+        }
+
+        cout << "Список студентов, родители которых не пришли на Собрание: ";
+
+        for (const auto& elem : list_2) {
+            cout << elem << "  ";
+        }
+
+        cout << endl;
+    }
+
+
+    void addParent(Parent &parent) {
+        parents.push_back(parent);
+    }
+
+    void addTeacher(Teacher &teacher) {
+        teachers.push_back(teacher);
+    }
+
+    void addLesson(Lesson &lesson) {
+        lessons.push_back(lesson);
+    }
+
+    void talkAbout() {
+        for (int i = 0; i < lessons.size(); i++) {
+            for (int check = 0; check < teachers.size(); check++) {
+                if (teachers[check].getName() == lessons[i].getTeacherName()) goto metka;
+            }
+
+            cout << lessons[i].getLessonName() << " Занятие: ";
+            cout << "Учителя нет" << endl;
+            return;
+            /////////////////////
+            metka:
+            cout << lessons[i].getLessonName() << " Занятие: " << endl;
+
+            for (int j = 0; j < parents.size(); j++) {
+                cout << "Родитель " << (j+1) << ": ";
+
+                for (int k = 0; k < parents[j].getChildren().size(); k++) {
+                    for (int n = 0; n < (lessons[i].getAllStudents()).size(); n++) {
+
+                            if ((lessons[i].getAllStudents())[n].getName() == parents[j].getChildren()[k].getName())
+                            {
+
+                                Student temp = (parents[j].getChildren()[k]);
+                                if (lessons[i].CertainIsExcellentStudent(lessons[i].getAllStudents()[n])) cout << temp.getName() << " хорошо учится. ";
+                                else cout << temp.getName() << " очень старается.";
+                            }
+                    }
+                }
+                cout << endl;
+            }
+            cout << endl;
+        }
+
+        for (int i = 0; i < lessons.size(); i++) {
+            for (int j = 0; j < parents.size(); j++) {
+
+                   for (int n = 0; n < (lessons[i].getAllStudents()).size(); n++) {
+                        if ((parents[j].getList().count(((lessons[i].getAllStudents())[n]).getName()))) list_1.insert(((lessons[i].getAllStudents())[n]).getName());
+                   }
+            }
+        }
+
+        for (int i = 0; i < lessons.size(); i++) {
+
+            for (int j = 0; j < (lessons[i].getAllStudents().size()); j++) {
+                if (!(list_1.count((lessons[i].getAllStudents())[j].getName()))) list_2.insert((lessons[i].getAllStudents())[j].getName());
+            }
+        }
+
     }
 
 };
@@ -336,6 +506,60 @@ int main() {
     p.sayAboutCertainChild("Аня");
     p.sayAboutCertainChild("Миша");
     p.sayAboutCertainChild("Гриша");
+
+    Teacher t1("art");
+    Teacher t2("math");
+
+    Parent p1;
+    p1.addChild(a);
+    p1.addChild(b);
+    p1.addChild(c);
+    p1.addChild(d);
+
+    Parent p2;
+    Student e("Ваня");
+    e.addMark(5);
+    p2.addChild(e);
+
+    Parent p3;
+    Student f("Маша");
+    f.addMark(4);
+    p3.addChild(f);
+
+    Lesson art("art");
+    art.addStudent(a);
+    art.addStudent(c);
+    art.addStudent(e);
+    art.addStudent(f);
+    art.setAllMarks(t1);
+    art.setAllMarks(t1);
+    art.setAllMarks(t1);
+
+    Lesson mat("math");
+    mat.addStudent(b);
+    mat.addStudent(e);
+    mat.addStudent(d);
+    mat.addStudent(f);
+    mat.setAllMarks(t2);
+    mat.setAllMarks(t2);
+
+    Meeting m1;
+    m1.addTeacher(t1);
+    m1.addParent(p1);
+    m1.addParent(p2);
+    m1.addParent(p3);
+    m1.addLesson(art);
+    m1.addLesson(mat);
+    m1.talkAbout();
+    m1.showList_1();
+
+    Meeting m2;
+    m2.addTeacher(t2);
+    m2.addParent(p2);
+    m2.addParent(p3);
+    m2.addLesson(mat);
+    m2.talkAbout();
+    m2.showList_1();
 
     return 0;
 }
