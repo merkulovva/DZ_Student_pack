@@ -7,9 +7,7 @@
 
 using namespace std;
 
-
 class Student {
-
 private:
     vector<int> marks;
     string name;
@@ -57,12 +55,10 @@ public:
 
     // Метод для определения является ли студент отличником
     bool isExcellentStudent() const {
-
         if (calculateRAU() >= 4.8) {
             cout << "Студент отличник" << endl;
             return 1;
         }
-
         else {
             cout << "Студент не отличник" << endl;
             return 0;
@@ -79,7 +75,6 @@ protected:
     string name;
 
 public:
-
     Teacher(string n): name(n) {};
 
     virtual string getName() {
@@ -93,14 +88,12 @@ public:
     }
 
     virtual void setMarkStudent(Student &student) {
-
         bool isExcellent = student.isExcellentStudent();
 
         if (mood == 1) {
             if (isExcellent) {
                 student.addMark(5);
             }
-
             else {
                 student.addMark(4);
             }
@@ -110,12 +103,10 @@ public:
             if (isExcellent) {
                 student.addMark((rand() % 2 == 0) ? 4 : 5);
             }
-
             else {
                 student.addMark((rand() % 2 == 0) ? 2 : 3);
             }
         }
-
         moodCounter++;
         if ((moodCounter % 5) == 0) {
             int moodChange = rand();
@@ -132,7 +123,6 @@ public:
 
 
 class RandomMoodTeacher: public Teacher {
-
 private:
     bool mood = rand() % 2;
 
@@ -144,14 +134,12 @@ public:
     }
 
     void setMarkStudent(Student &student) override {
-
         bool isExcellent = student.isExcellentStudent();
 
         if (mood == 1) {
             if (isExcellent) {
                 student.addMark(5);
             }
-
             else {
                 student.addMark(4);
             }
@@ -161,24 +149,20 @@ public:
             if (isExcellent) {
                 student.addMark((rand() % 2 == 0) ? 4 : 5);
             }
-
             else {
                 student.addMark((rand() % 2 == 0) ? 2 : 3);
             }
         }
-
         moodCounter++;
         if ((moodCounter % 2) == 0) {
             int moodChange = rand();
             setMood(moodChange % 2);
         }
-
     }
 
 };
 
 class KindTeacher: public Teacher {
-
 public:
      KindTeacher(string n): Teacher(n) {};
 
@@ -193,7 +177,6 @@ public:
 };
 
 class EvilTeacher: public Teacher {
-
 public:
     EvilTeacher(string n): Teacher(n) {};
 
@@ -251,7 +234,6 @@ public:
 
     void printNewMarks() {
         int n = 0;
-
         for (int i = 0; i < groupList.size(); i++) {
             n++;
             cout << n << " студент: ";
@@ -266,7 +248,6 @@ public:
 
     bool CertainIsExcellentStudent(Student &student) {
         float sum;
-
         for (int i = 1; i < student.getMarks().size(); i++) {
             sum += student.getMarks()[i];
         }
@@ -288,14 +269,26 @@ public:
 
 
 class Parent {
-
 private:
+    bool isGranny = 0;
+
+protected:
     bool mood = rand() % 2;
     vector<Student> children;
     set<string> childrenList;
 
-
 public:
+    string sayTheBest() {
+        return "Самый лучший внук (или внучка)!";
+    };
+
+    bool checkGrannyStatus() {
+        return isGranny;
+    }
+
+    virtual bool Bch() {
+        return 0;
+    }
 
     void addChild(Student &child) {
         children.push_back(child);
@@ -310,37 +303,31 @@ public:
         if (children.size() == 0) return;
 
         for (int i = 0; i < children.size(); i++) {
-
             if (children[i].isExcellentStudent() && mood == 1) cout << children[i].getName() << " учится на отлично, он молодец. ";
             if (children[i].isExcellentStudent() && mood == 0) cout << children[i].getName() << " отличник, но не помогает мне по дому. ";
             if (!(children[i].isExcellentStudent()) && mood == 1) cout << children[i].getName() << " не отличник, но за то у него есть другие таланты, например хорошо рисует. ";
             if (!(children[i].isExcellentStudent()) && mood == 0) cout << children[i].getName() << " плохо учится и не помогает по дому, он бесполезен.";
         }
-
         cout << endl;
     }
 
     void sayAboutRandomChild() {
-
         int n = rand() % children.size();
 
         if (children[n].isExcellentStudent() && mood == 1) cout << children[n].getName() << " учится на отлично, он молодец. ";
         if (children[n].isExcellentStudent() && mood == 0) cout << children[n].getName() << " отличник, но не помогает мне по дому. ";
         if (!(children[n].isExcellentStudent()) && mood == 1) cout << children[n].getName() << " не отличник, но за то у него есть другие таланты, например хорошо рисует. ";
         if (!(children[n].isExcellentStudent()) && mood == 0) cout << children[n].getName() << " плохо учится и не помогает по дому, он бесполезен.";
-
         cout << endl;
     }
 
     void sayAboutGeneral () {
-
         bool token = 1;
 
         for (int i = 0; i < children.size(); i++) {
             if (children[i].isExcellentStudent()) continue;
             else token = 0;
         }
-
         if (token == 1 && mood == 1) cout << "Они самые лучшие дети" << endl;
         if (token == 1 && mood == 0) cout << "Они хорошие дети" << endl;
         if (token == 0 && mood == 1) cout << "Они хорошие дети, но не самые лучшие" << endl;
@@ -348,7 +335,6 @@ public:
     }
 
     void sayAboutCertainChild(string name) {
-
         int counter = -1;
 
         for (int i = 0; i < children.size(); i++) {
@@ -362,14 +348,11 @@ public:
             for (int i = 0; i < children.size(); i++) {
                 if (!children[i].isExcellentStudent()) token = 0;
             }
-
             if (token == 1 && mood == 1) cout << children[counter].getName() << " учится на отлично, он молодец." << endl;
             if (token == 1 && mood == 0) cout << children[counter].getName() << " отличник, но не помогает мне по дому." << endl;
             if (token == 0 && mood == 1) cout << children[counter].getName() << " не отличник, но за то у него есть другие таланты, например хорошо рисует." << endl;
             if (token == 0 && mood == 0) cout << children[counter].getName() << " плохо учится и не помогает по дому, он бесполезен." << endl;
-
         }
-
         else cout << name << " - это не мой ребенок" << endl;
     }
 
@@ -379,42 +362,49 @@ public:
 
 };
 
+class Granny: public Parent {
+private:
+    bool isGranny = 1;
+
+public:
+    bool Bch() override {
+        return 1;
+    }
+};
+
 
 class Meeting {
-
 private:
     set<string> list_1;
     set<string> list_2;
 
-    vector<Parent> parents;
+    vector<Parent*> parents;
     vector<Teacher> teachers;
     vector<Lesson> lessons;
 
 public:
-
     Meeting() {
         cout << "Новое собрание!" << endl;
     }
 
     void showList_1() {
-
         if (list_2.size() == 0) {
             cout << endl;
             return;
         }
-
         cout << "Список студентов, родители которых не пришли на Собрание: ";
-
         for (const auto& elem : list_2) {
             cout << elem << "  ";
         }
-
         cout << endl;
     }
 
-
-    void addParent(Parent &parent) {
+    void addParent(Parent *parent) {
         parents.push_back(parent);
+    }
+
+    void addParent(Granny *granny) {
+        parents.push_back(granny);
     }
 
     void addTeacher(Teacher &teacher) {
@@ -441,15 +431,21 @@ public:
             for (int j = 0; j < parents.size(); j++) {
                 cout << "Родитель " << (j+1) << ": ";
 
-                for (int k = 0; k < parents[j].getChildren().size(); k++) {
+                for (int k = 0; k < parents[j]->getChildren().size(); k++) {
                     for (int n = 0; n < (lessons[i].getAllStudents()).size(); n++) {
 
-                            if ((lessons[i].getAllStudents())[n].getName() == parents[j].getChildren()[k].getName())
+                            if ((lessons[i].getAllStudents())[n].getName() == parents[j]->getChildren()[k].getName())
                             {
+                                Student temp = (parents[j]->getChildren()[k]);
+                                if (lessons[i].CertainIsExcellentStudent(lessons[i].getAllStudents()[n])) {
+                                    if (parents[j]->Bch()) (cout << temp.getName() << " " << parents[j]->sayTheBest());
+                                    else cout << temp.getName() << " хорошо учится. ";
+                                }
 
-                                Student temp = (parents[j].getChildren()[k]);
-                                if (lessons[i].CertainIsExcellentStudent(lessons[i].getAllStudents()[n])) cout << temp.getName() << " хорошо учится. ";
-                                else cout << temp.getName() << " очень старается.";
+                                else {
+                                    if (parents[j]->Bch()) (cout << temp.getName() << " " << parents[j]->sayTheBest());
+                                    else cout << temp.getName() << " очень старается. ";
+                                }
                             }
                     }
                 }
@@ -462,7 +458,7 @@ public:
             for (int j = 0; j < parents.size(); j++) {
 
                    for (int n = 0; n < (lessons[i].getAllStudents()).size(); n++) {
-                        if ((parents[j].getList().count(((lessons[i].getAllStudents())[n]).getName()))) list_1.insert(((lessons[i].getAllStudents())[n]).getName());
+                        if ((parents[j]->getList().count(((lessons[i].getAllStudents())[n]).getName()))) list_1.insert(((lessons[i].getAllStudents())[n]).getName());
                    }
             }
         }
@@ -481,7 +477,6 @@ public:
 
 
 int main() {
-
     srand(time(NULL));
 
     Student a("Аня");
@@ -500,13 +495,6 @@ int main() {
     p.addChild(c);
     p.addChild(d);
 
-    p.sayAboutAllChild();
-    p.sayAboutRandomChild();
-    p.sayAboutGeneral();
-    p.sayAboutCertainChild("Аня");
-    p.sayAboutCertainChild("Миша");
-    p.sayAboutCertainChild("Гриша");
-
     Teacher t1("art");
     Teacher t2("math");
 
@@ -521,21 +509,23 @@ int main() {
     e.addMark(5);
     p2.addChild(e);
 
-    Parent p3;
+    Granny p3;
     Student f("Маша");
     f.addMark(4);
-    p3.addChild(f);
 
+    p3.addChild(f);
     Lesson art("art");
+
     art.addStudent(a);
     art.addStudent(c);
     art.addStudent(e);
     art.addStudent(f);
-    art.setAllMarks(t1);
-    art.setAllMarks(t1);
-    art.setAllMarks(t1);
 
+    art.setAllMarks(t1);
+    art.setAllMarks(t1);
+    art.setAllMarks(t1);
     Lesson mat("math");
+
     mat.addStudent(b);
     mat.addStudent(e);
     mat.addStudent(d);
@@ -545,9 +535,10 @@ int main() {
 
     Meeting m1;
     m1.addTeacher(t1);
-    m1.addParent(p1);
-    m1.addParent(p2);
-    m1.addParent(p3);
+    m1.addParent(&p1);
+    m1.addParent(&p2);
+    m1.addParent(&p3);
+
     m1.addLesson(art);
     m1.addLesson(mat);
     m1.talkAbout();
@@ -555,8 +546,9 @@ int main() {
 
     Meeting m2;
     m2.addTeacher(t2);
-    m2.addParent(p2);
-    m2.addParent(p3);
+    m2.addParent(&p1);
+    m2.addParent(&p2);
+    m2.addParent(&p3);
     m2.addLesson(mat);
     m2.talkAbout();
     m2.showList_1();
